@@ -3,11 +3,14 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
   Query,
 } from '@nestjs/common';
+import { Movie } from './entities/movie.entity';
+import { MoviesService } from './movies.service';
 
 /**
  * nest generate controller :
@@ -16,36 +19,35 @@ import {
 
 @Controller('movies') // entry point (라우터 역할)
 export class MoviesController {
-  @Get()
-  getAll() {
-    return 'This will return all movies';
-  }
+  // Nest에서는 직접 import하는 것이 아니고 이런식으로 '요청'한다고 생각하자 !
+  constructor(private readonly moviesService: MoviesService) {}
 
-  @Get('search') // search가 get(:id)보다 밑에 있으면 NestJS는 search를 id로 판단
-  search(@Query('year') searchingYear: string) {
-    return `We are searching for a movie made after: ${searchingYear}`;
+  @Get()
+  getAll(): Movie[] {
+    return this.moviesService.getAll();
   }
 
   @Get(':id' /* 이름이 같아야 함*/) // parameter를 가져오는 방법
-  getOne(@Param('id' /* 이름이 같아야 함*/) movieId: string) {
-    return `This will return one movie with the id: ${movieId}`;
+  getOne(@Param('id' /* 이름이 같아야 함*/) movieId: string): Movie {
+    const movie = this.moviesService.getOne(movieId);
+    if (!movie) {
+      throw new NotFoundException(`Movie with ID ${movieId} is not found`); // HttpException에서 확장된 NEST 기본 기능
+    }
+    return movie;
   }
 
   @Post()
   create(@Body() movieData /* Body 가져오는 방법 */) {
-    return movieData; // return JSON data
+    return this.moviesService.create(movieData); // 자동으로 성공시 201 Created 리턴
   }
 
   @Delete(':id')
   remove(@Param('id') movieId: string) {
-    return `This will delete a movie with the id: ${movieId}`;
+    return this.moviesService.deleteOne(movieId);
   }
 
   @Patch(':id')
   patch(@Param('id') movieId: string, @Body() updateData) {
-    return {
-      updatedMovie: movieId,
-      ...updateData,
-    };
+    return this.moviesService.update(movieId, updateData);
   }
 }
