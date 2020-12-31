@@ -8,7 +8,7 @@ import { Movie } from './entities/movie.entity';
  */
 
 // 컨트롤러에서 호출할 함수들을 정의
-@Injectable()
+@Injectable() // dependency injection
 export class MoviesService {
   private movies: Movie[] = [];
 
