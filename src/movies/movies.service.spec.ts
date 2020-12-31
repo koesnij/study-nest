@@ -13,6 +13,14 @@ describe('MoviesService', () => {
     service = module.get<MoviesService>(MoviesService);
   });
 
+  afterEach(() => {
+    /**
+     * Hook
+     * 테스트가 끝나고 할 작업들
+     * 예) 디비 정리
+     */
+  });
+
   // 테스트하는 부분 (individual test)
   it('should be defined', () => {
     expect(service).toBeDefined();
