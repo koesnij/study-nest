@@ -9,6 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { CreateMovieDTO } from './dto/create-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesService } from './movies.service';
 
@@ -28,7 +29,10 @@ export class MoviesController {
   }
 
   @Get(':id' /* 이름이 같아야 함*/) // parameter를 가져오는 방법
-  getOne(@Param('id' /* 이름이 같아야 함*/) movieId: string): Movie {
+  getOne(
+    @Param('id' /* 이름이 같아야 함*/)
+    movieId: number /* transform pipe - 타입을 자동으로 변환해줌 */,
+  ): Movie {
     const movie = this.moviesService.getOne(movieId);
     if (!movie) {
       throw new NotFoundException(`Movie with ID ${movieId} is not found`); // HttpException에서 확장된 NEST 기본 기능
@@ -37,17 +41,17 @@ export class MoviesController {
   }
 
   @Post()
-  create(@Body() movieData /* Body 가져오는 방법 */) {
+  create(@Body() movieData: CreateMovieDTO /* Body 가져오는 방법 */) {
     return this.moviesService.create(movieData); // 자동으로 성공시 201 Created 리턴
   }
 
   @Delete(':id')
-  remove(@Param('id') movieId: string) {
+  remove(@Param('id') movieId: number /* */) {
     return this.moviesService.deleteOne(movieId);
   }
 
   @Patch(':id')
-  patch(@Param('id') movieId: string, @Body() updateData) {
+  patch(@Param('id') movieId: number /* */, @Body() updateData) {
     return this.moviesService.update(movieId, updateData);
   }
 }

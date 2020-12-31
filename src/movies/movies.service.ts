@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CreateMovieDTO } from './dto/create-movie.dto';
 import { Movie } from './entities/movie.entity';
 /**
  * nest generate service :
@@ -14,23 +15,23 @@ export class MoviesService {
     return this.movies;
   }
 
-  getOne(id: string): Movie {
-    return this.movies.find((movie) => movie.id === +id); // +id === parseInt(id)
+  getOne(id: number): Movie {
+    return this.movies.find((movie) => movie.id === id); // +id === parseInt(id)
   }
 
-  deleteOne(id: string): boolean {
+  deleteOne(id: number): boolean {
     this.getOne(id); //컨트롤러 내의 getOne 함수
-    this.movies = this.movies.filter((movie) => movie.id !== +id);
+    this.movies = this.movies.filter((movie) => movie.id !== id);
     return true;
   }
 
-  create(movieData) {
+  create(movieData: CreateMovieDTO) {
     const id = this.movies.length + 1;
     this.movies.push({ id, ...movieData });
     return id;
   }
 
-  update(id: string, updateData) {
+  update(id: number, updateData) {
     // 그냥 테스트 용
     const movie = this.getOne(id);
     this.deleteOne(id);
