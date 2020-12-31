@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { MoviesService } from './movies.service';
 
@@ -17,9 +18,27 @@ describe('MoviesService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should be 4', () => {
-    // 테스트하는 함수
-    expect(2 + 2).toEqual(4); // passed
-    // expect(2 + 2).toEqual(5); // failed
+  describe('getAll potato name doesnt matter', () => {
+    it('should return an array', () => {
+      const result = service.getAll();
+      expect(result).toBeInstanceOf(Array); // 배열 인스턴스를 제대로 리턴하는지
+    });
+  });
+
+  describe('getOne', () => {
+    it('should return a movie', () => {
+      service.create({ title: 'Test Movie', genres: ['fortest'], year: 1970 });
+      const movie = service.getOne(1);
+      expect(movie).toBeDefined();
+      // expect(movie.id).toEqual(1); // it works
+    });
+    it('should throw 404 error', () => {
+      try {
+        service.getOne(999);
+      } catch (err) {
+        expect(err).toBeInstanceOf(NotFoundException);
+        // expect(err.message).toEqual('Movie with ID 999 is not found'); // it works
+      }
+    });
   });
 });
