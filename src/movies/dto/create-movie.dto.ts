@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 /**
  *  Data Transfer Object : 데이터 전송 객체
@@ -12,6 +12,7 @@ export class CreateMovieDTO {
   @IsNumber()
   readonly year: number;
 
+  @IsOptional() // not required
   @IsString({ each: true /* 모든 요소를 하나씩 검사 */ })
   readonly genres: string[];
 }

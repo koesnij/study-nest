@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMovieDTO } from './dto/create-movie.dto';
+import { UpdateMovieDTO } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 /**
  * nest generate service :
@@ -31,7 +32,7 @@ export class MoviesService {
     return id;
   }
 
-  update(id: number, updateData) {
+  update(id: number, updateData: UpdateMovieDTO) {
     // 그냥 테스트 용
     const movie = this.getOne(id);
     this.deleteOne(id);
