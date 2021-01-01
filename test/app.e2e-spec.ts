@@ -22,7 +22,18 @@ describe('AppController (e2e)', () => {
       .expect('Welcome to my Movie API');
   });
 
-  it('/movies (GET)', () => {
-    return request(app.getHttpServer()).get('/movies').expect(200).expect([]); // 보통 Testing DB를 따로 둠
+  describe('/movies', () => {
+    it('GET', () => {
+      return request(app.getHttpServer())
+        .get('/movies')
+        .expect(200) // 보통 Testing DB를 따로 둠
+        .expect([]);
+    });
+    it('POST', () => {
+      return request(app.getHttpServer())
+        .post('/movies')
+        .send({ title: 'Test Movie', genres: ['fortest'], year: 1970 })
+        .expect(201);
+    });
   });
 });
