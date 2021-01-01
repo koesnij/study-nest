@@ -29,8 +29,9 @@ export class MoviesController {
   /**
    * NestJS는 기본적으로 Express 위에서 동작하나, 직접 접근은 권장X
    * Fastify이 성능상 좋기 때문에 권장 + 프레임워크 간 마이그레이션이 쉬움
+   * getAll(@Req() req, @Res() res): Movie[] {
    */
-  getAll(@Req() req, @Res() res): Movie[] {
+  getAll(): Movie[] {
     return this.moviesService.getAll();
   }
 
